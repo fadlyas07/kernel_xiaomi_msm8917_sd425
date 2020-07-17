@@ -2355,14 +2355,14 @@ static int hardwareinfo_set(struct ft5x06_ts_data *data, u8 value_name, u8 color
 		reg_addr = 0xA6;
 		ft5x06_i2c_read(data->client, &reg_addr, 1, &uc_tp_fm_ver, 1);
 		snprintf(firmware_ver, HARDWARE_MAX_ITEM_LONGTH, "%s, %s, FW:0x%x, %s", vendor_for_id, ic_name, uc_tp_fm_ver, ic_color);
-	} else
-		snprintf(firmware_ver, HARDWARE_MAX_ITEM_LONGTH, "%s, %s, FW:0x%x, %s", vendor_for_id, ic_name, data->fw_ver[0], ic_color);
-
+	} else {
 		err = hardwareinfo_set_prop(HARDWARE_TP, firmware_ver);
 		dev_err(&data->client->dev, "Set hardwareinfo is: %s\n", firmware_ver);
-		if (err < 0)
+		snprintf(firmware_ver, HARDWARE_MAX_ITEM_LONGTH, "%s, %s, FW:0x%x, %s", vendor_for_id, ic_name, data->fw_ver[0], ic_color);
+		if (err < 0) {
 		return -EPERM;
-
+		}
+	}
 	return 0;
 }
 #endif
